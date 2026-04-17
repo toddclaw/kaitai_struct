@@ -1,4 +1,4 @@
-microsoft_network_monitor_v2_proto = Proto("microsoft_network_monitor_v2","microsoft_network_monitor_v2 file")
+microsoft_network_monitor_v2_proto = Proto("kaitai_microsoft_network_monitor_v2","microsoft_network_monitor_v2 file")
 
 local f = microsoft_network_monitor_v2_proto.fields
 
@@ -29,27 +29,27 @@ f.body = ProtoField.bytes("microsoft_network_monitor_v2.frame.body", "body")
 
 -- sub-type parsers
 local function parse_frame_index(buffer, tree, offset)
-  local sub = tree:add("frame_index")
-  -- entries: manual implementation needed
+  local subtree = tree:add("frame_index")
+  -- entries: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_frame_index_entry(buffer, tree, offset)
-  local sub = tree:add("frame_index_entry")
+  local subtree = tree:add("frame_index_entry")
   local ofs_val = buffer(offset, 4):uint()
-  sub:add(f.ofs, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ofs, buffer(offset, 4)); offset = offset + 4
   return offset
 end
 
 local function parse_frame(buffer, tree, offset)
-  local sub = tree:add("frame")
-  -- ts_delta: manual implementation needed
+  local subtree = tree:add("frame")
+  -- ts_delta: manual implementation needed (complex size/type)
   local orig_len_val = buffer(offset, 4):uint()
-  sub:add(f.orig_len, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.orig_len, buffer(offset, 4)); offset = offset + 4
   local inc_len_val = buffer(offset, 4):uint()
-  sub:add(f.inc_len, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.inc_len, buffer(offset, 4)); offset = offset + 4
   local body_size = inc_len_val
-  sub:add(f.body, buffer(offset, body_size)); offset = offset + body_size
+  subtree:add(f.body, buffer(offset, body_size)); offset = offset + body_size
   return offset
 end
 
@@ -66,7 +66,7 @@ function microsoft_network_monitor_v2_proto.dissector(buffer, pinfo, tree)
   main:add(f.version_major, buffer(offset, 1)); offset = offset + 1
   local mac_type_val = buffer(offset, 2):uint()
   main:add(f.mac_type, buffer(offset, 2)); offset = offset + 2
-  -- time_capture_start: manual implementation needed
+  -- time_capture_start: manual implementation needed (complex size/type)
   local frame_table_ofs_val = buffer(offset, 4):uint()
   main:add(f.frame_table_ofs, buffer(offset, 4)); offset = offset + 4
   local frame_table_len_val = buffer(offset, 4):uint()

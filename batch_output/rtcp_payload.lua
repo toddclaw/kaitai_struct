@@ -1,4 +1,4 @@
-rtcp_payload_proto = Proto("rtcp_payload","rtcp_payload file")
+rtcp_payload_proto = Proto("kaitai_rtcp_payload","rtcp_payload file")
 
 local f = rtcp_payload_proto.fields
 
@@ -55,145 +55,144 @@ f.ssrc_list = ProtoField.bytes("rtcp_payload.psfb_afb_remb_packet.ssrc_list", "s
 
 -- sub-type parsers
 local function parse_rtcp_packet(buffer, tree, offset)
-  local sub = tree:add("rtcp_packet")
-  -- version: manual implementation needed
-  -- padding: manual implementation needed
-  -- subtype: manual implementation needed
+  local subtree = tree:add("rtcp_packet")
+  -- version: manual implementation needed (complex size/type)
+  -- padding: manual implementation needed (complex size/type)
+  -- subtype: manual implementation needed (complex size/type)
   local payload_type_val = buffer(offset, 1):uint()
-  sub:add(f.payload_type, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.payload_type, buffer(offset, 1)); offset = offset + 1
   local length_val = buffer(offset, 2):uint()
-  sub:add(f.length, buffer(offset, 2)); offset = offset + 2
-  local body_size = 4 * length_val
-  sub:add(f.body, buffer(offset, body_size)); offset = offset + body_size
+  subtree:add(f.length, buffer(offset, 2)); offset = offset + 2
+  -- body: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_sr_packet(buffer, tree, offset)
-  local sub = tree:add("sr_packet")
+  local subtree = tree:add("sr_packet")
   local ssrc_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
   local ntp_msw_val = buffer(offset, 4):uint()
-  sub:add(f.ntp_msw, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ntp_msw, buffer(offset, 4)); offset = offset + 4
   local ntp_lsw_val = buffer(offset, 4):uint()
-  sub:add(f.ntp_lsw, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ntp_lsw, buffer(offset, 4)); offset = offset + 4
   local rtp_timestamp_val = buffer(offset, 4):uint()
-  sub:add(f.rtp_timestamp, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.rtp_timestamp, buffer(offset, 4)); offset = offset + 4
   local sender_packet_count_val = buffer(offset, 4):uint()
-  sub:add(f.sender_packet_count, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.sender_packet_count, buffer(offset, 4)); offset = offset + 4
   local sender_octet_count_val = buffer(offset, 4):uint()
-  sub:add(f.sender_octet_count, buffer(offset, 4)); offset = offset + 4
-  -- report_block: manual implementation needed
+  subtree:add(f.sender_octet_count, buffer(offset, 4)); offset = offset + 4
+  -- report_block: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_rr_packet(buffer, tree, offset)
-  local sub = tree:add("rr_packet")
+  local subtree = tree:add("rr_packet")
   local ssrc_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
-  -- report_block: manual implementation needed
+  subtree:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
+  -- report_block: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_report_block(buffer, tree, offset)
-  local sub = tree:add("report_block")
+  local subtree = tree:add("report_block")
   local ssrc_source_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc_source, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ssrc_source, buffer(offset, 4)); offset = offset + 4
   local lost_val_val = buffer(offset, 1):uint()
-  sub:add(f.lost_val, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.lost_val, buffer(offset, 1)); offset = offset + 1
   local highest_seq_num_received_val = buffer(offset, 4):uint()
-  sub:add(f.highest_seq_num_received, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.highest_seq_num_received, buffer(offset, 4)); offset = offset + 4
   local interarrival_jitter_val = buffer(offset, 4):uint()
-  sub:add(f.interarrival_jitter, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.interarrival_jitter, buffer(offset, 4)); offset = offset + 4
   local lsr_val = buffer(offset, 4):uint()
-  sub:add(f.lsr, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.lsr, buffer(offset, 4)); offset = offset + 4
   local dlsr_val = buffer(offset, 4):uint()
-  sub:add(f.dlsr, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.dlsr, buffer(offset, 4)); offset = offset + 4
   return offset
 end
 
 local function parse_sdes_packet(buffer, tree, offset)
-  local sub = tree:add("sdes_packet")
-  -- source_chunk: manual implementation needed
+  local subtree = tree:add("sdes_packet")
+  -- source_chunk: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_source_chunk(buffer, tree, offset)
-  local sub = tree:add("source_chunk")
+  local subtree = tree:add("source_chunk")
   local ssrc_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
-  -- sdes_tlv: manual implementation needed
+  subtree:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
+  -- sdes_tlv: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_sdes_tlv(buffer, tree, offset)
-  local sub = tree:add("sdes_tlv")
+  local subtree = tree:add("sdes_tlv")
   local type_val = buffer(offset, 1):uint()
-  sub:add(f.type, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.type, buffer(offset, 1)); offset = offset + 1
   local length_val = buffer(offset, 1):uint()
-  sub:add(f.length, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.length, buffer(offset, 1)); offset = offset + 1
   local value_size = length_val
-  sub:add(f.value, buffer(offset, value_size)); offset = offset + value_size
+  subtree:add(f.value, buffer(offset, value_size)); offset = offset + value_size
   return offset
 end
 
 local function parse_rtpfb_packet(buffer, tree, offset)
-  local sub = tree:add("rtpfb_packet")
+  local subtree = tree:add("rtpfb_packet")
   local ssrc_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
   local ssrc_media_source_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc_media_source, buffer(offset, 4)); offset = offset + 4
-  -- fci_block: manual implementation needed
+  subtree:add(f.ssrc_media_source, buffer(offset, 4)); offset = offset + 4
+  -- fci_block: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_rtpfb_transport_feedback_packet(buffer, tree, offset)
-  local sub = tree:add("rtpfb_transport_feedback_packet")
+  local subtree = tree:add("rtpfb_transport_feedback_packet")
   local base_sequence_number_val = buffer(offset, 2):uint()
-  sub:add(f.base_sequence_number, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.base_sequence_number, buffer(offset, 2)); offset = offset + 2
   local packet_status_count_val = buffer(offset, 2):uint()
-  sub:add(f.packet_status_count, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.packet_status_count, buffer(offset, 2)); offset = offset + 2
   local b4_val = buffer(offset, 4):uint()
-  sub:add(f.b4, buffer(offset, 4)); offset = offset + 4
-  -- remaining: manual implementation needed
+  subtree:add(f.b4, buffer(offset, 4)); offset = offset + 4
+  -- remaining: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_packet_status_chunk(buffer, tree, offset)
-  local sub = tree:add("packet_status_chunk")
-  -- t: manual implementation needed
-  -- s2: manual implementation needed
-  -- s1: manual implementation needed
-  -- rle: manual implementation needed
-  -- symbol_list: manual implementation needed
+  local subtree = tree:add("packet_status_chunk")
+  -- t: manual implementation needed (complex size/type)
+  -- s2: manual implementation needed (complex size/type)
+  -- s1: manual implementation needed (complex size/type)
+  -- rle: manual implementation needed (complex size/type)
+  -- symbol_list: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_psfb_packet(buffer, tree, offset)
-  local sub = tree:add("psfb_packet")
+  local subtree = tree:add("psfb_packet")
   local ssrc_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
   local ssrc_media_source_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc_media_source, buffer(offset, 4)); offset = offset + 4
-  -- fci_block: manual implementation needed
+  subtree:add(f.ssrc_media_source, buffer(offset, 4)); offset = offset + 4
+  -- fci_block: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_psfb_afb_packet(buffer, tree, offset)
-  local sub = tree:add("psfb_afb_packet")
+  local subtree = tree:add("psfb_afb_packet")
   local uid_val = buffer(offset, 4):uint()
-  sub:add(f.uid, buffer(offset, 4)); offset = offset + 4
-  -- contents: manual implementation needed
+  subtree:add(f.uid, buffer(offset, 4)); offset = offset + 4
+  -- contents: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_psfb_afb_remb_packet(buffer, tree, offset)
-  local sub = tree:add("psfb_afb_remb_packet")
+  local subtree = tree:add("psfb_afb_remb_packet")
   local num_ssrc_val = buffer(offset, 1):uint()
-  sub:add(f.num_ssrc, buffer(offset, 1)); offset = offset + 1
-  -- br_exp: manual implementation needed
-  -- br_mantissa: manual implementation needed
+  subtree:add(f.num_ssrc, buffer(offset, 1)); offset = offset + 1
+  -- br_exp: manual implementation needed (complex size/type)
+  -- br_mantissa: manual implementation needed (complex size/type)
   local ssrc_list_val = buffer(offset, 4):uint()
-  sub:add(f.ssrc_list, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ssrc_list, buffer(offset, 4)); offset = offset + 4
   return offset
 end
 

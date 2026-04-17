@@ -1,4 +1,4 @@
-rtp_packet_proto = Proto("rtp_packet","rtp_packet file")
+rtp_packet_proto = Proto("kaitai_rtp_packet","rtp_packet file")
 
 local f = rtp_packet_proto.fields
 
@@ -20,11 +20,11 @@ f.length = ProtoField.bytes("rtp_packet.header_extention.length", "length")
 
 -- sub-type parsers
 local function parse_header_extention(buffer, tree, offset)
-  local sub = tree:add("header_extention")
+  local subtree = tree:add("header_extention")
   local id_val = buffer(offset, 2):uint()
-  sub:add(f.id, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.id, buffer(offset, 2)); offset = offset + 2
   local length_val = buffer(offset, 2):uint()
-  sub:add(f.length, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.length, buffer(offset, 2)); offset = offset + 2
   return offset
 end
 
@@ -34,12 +34,12 @@ function rtp_packet_proto.dissector(buffer, pinfo, tree)
   local main = tree:add(rtp_packet_proto, buffer(), "rtp_packet")
   local offset = 0
 
-  -- version: manual implementation needed
-  -- has_padding: manual implementation needed
-  -- has_extension: manual implementation needed
-  -- csrc_count: manual implementation needed
-  -- marker: manual implementation needed
-  -- payload_type: manual implementation needed
+  -- version: manual implementation needed (complex size/type)
+  -- has_padding: manual implementation needed (complex size/type)
+  -- has_extension: manual implementation needed (complex size/type)
+  -- csrc_count: manual implementation needed (complex size/type)
+  -- marker: manual implementation needed (complex size/type)
+  -- payload_type: manual implementation needed (complex size/type)
   local sequence_number_val = buffer(offset, 2):uint()
   main:add(f.sequence_number, buffer(offset, 2)); offset = offset + 2
   local timestamp_val = buffer(offset, 4):uint()
@@ -47,8 +47,8 @@ function rtp_packet_proto.dissector(buffer, pinfo, tree)
   local ssrc_val = buffer(offset, 4):uint()
   main:add(f.ssrc, buffer(offset, 4)); offset = offset + 4
   offset = parse_header_extention(buffer, main, offset)
-  -- data: manual implementation needed
-  -- padding: manual implementation needed
+  -- data: manual implementation needed (complex size/type)
+  -- padding: manual implementation needed (complex size/type)
 end
 
 tcp_table = DissectorTable.get("tcp.port")

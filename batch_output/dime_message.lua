@@ -1,4 +1,4 @@
-dime_message_proto = Proto("dime_message","dime_message file")
+dime_message_proto = Proto("kaitai_dime_message","dime_message file")
 
 local f = dime_message_proto.fields
 
@@ -30,57 +30,56 @@ f.data_padding = ProtoField.bytes("dime_message.record.data_padding", "data_padd
 
 -- sub-type parsers
 local function parse_padding(buffer, tree, offset)
-  local sub = tree:add("padding")
-  local boundary_padding_size = (- _io.pos) % 4_val
-  sub:add(f.boundary_padding, buffer(offset, boundary_padding_size)); offset = offset + boundary_padding_size
+  local subtree = tree:add("padding")
+  -- boundary_padding: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_option_field(buffer, tree, offset)
-  local sub = tree:add("option_field")
-  -- option_elements: manual implementation needed
+  local subtree = tree:add("option_field")
+  -- option_elements: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_option_element(buffer, tree, offset)
-  local sub = tree:add("option_element")
+  local subtree = tree:add("option_element")
   local element_format_val = buffer(offset, 2):uint()
-  sub:add(f.element_format, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.element_format, buffer(offset, 2)); offset = offset + 2
   local len_element_val = buffer(offset, 2):uint()
-  sub:add(f.len_element, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len_element, buffer(offset, 2)); offset = offset + 2
   local element_data_size = len_element_val
-  sub:add(f.element_data, buffer(offset, element_data_size)); offset = offset + element_data_size
+  subtree:add(f.element_data, buffer(offset, element_data_size)); offset = offset + element_data_size
   return offset
 end
 
 local function parse_record(buffer, tree, offset)
-  local sub = tree:add("record")
-  -- version: manual implementation needed
-  -- is_first_record: manual implementation needed
-  -- is_last_record: manual implementation needed
-  -- is_chunk_record: manual implementation needed
-  -- type_format: manual implementation needed
-  -- reserved: manual implementation needed
+  local subtree = tree:add("record")
+  -- version: manual implementation needed (complex size/type)
+  -- is_first_record: manual implementation needed (complex size/type)
+  -- is_last_record: manual implementation needed (complex size/type)
+  -- is_chunk_record: manual implementation needed (complex size/type)
+  -- type_format: manual implementation needed (complex size/type)
+  -- reserved: manual implementation needed (complex size/type)
   local len_options_val = buffer(offset, 2):uint()
-  sub:add(f.len_options, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len_options, buffer(offset, 2)); offset = offset + 2
   local len_id_val = buffer(offset, 2):uint()
-  sub:add(f.len_id, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len_id, buffer(offset, 2)); offset = offset + 2
   local len_type_val = buffer(offset, 2):uint()
-  sub:add(f.len_type, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len_type, buffer(offset, 2)); offset = offset + 2
   local len_data_val = buffer(offset, 4):uint()
-  sub:add(f.len_data, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.len_data, buffer(offset, 4)); offset = offset + 4
   local options_size = len_options_val
-  sub:add(f.options, buffer(offset, options_size)); offset = offset + options_size
-  -- options_padding: manual implementation needed
+  subtree:add(f.options, buffer(offset, options_size)); offset = offset + options_size
+  -- options_padding: manual implementation needed (complex size/type)
   local id_size = len_id_val
-  sub:add(f.id, buffer(offset, id_size)); offset = offset + id_size
-  -- id_padding: manual implementation needed
+  subtree:add(f.id, buffer(offset, id_size)); offset = offset + id_size
+  -- id_padding: manual implementation needed (complex size/type)
   local type_size = len_type_val
-  sub:add(f.type, buffer(offset, type_size)); offset = offset + type_size
-  -- type_padding: manual implementation needed
+  subtree:add(f.type, buffer(offset, type_size)); offset = offset + type_size
+  -- type_padding: manual implementation needed (complex size/type)
   local data_size = len_data_val
-  sub:add(f.data, buffer(offset, data_size)); offset = offset + data_size
-  -- data_padding: manual implementation needed
+  subtree:add(f.data, buffer(offset, data_size)); offset = offset + data_size
+  -- data_padding: manual implementation needed (complex size/type)
   return offset
 end
 

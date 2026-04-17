@@ -1,4 +1,4 @@
-dns_packet_proto = Proto("dns_packet","dns_packet file")
+dns_packet_proto = Proto("kaitai_dns_packet","dns_packet file")
 
 local f = dns_packet_proto.fields
 
@@ -49,121 +49,121 @@ f.mx = ProtoField.bytes("dns_packet.mx_info.mx", "mx")
 
 -- sub-type parsers
 local function parse_query(buffer, tree, offset)
-  local sub = tree:add("query")
-  -- name: manual implementation needed
+  local subtree = tree:add("query")
+  -- name: manual implementation needed (complex size/type)
   local type_val = buffer(offset, 2):uint()
-  sub:add(f.type, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.type, buffer(offset, 2)); offset = offset + 2
   local query_class_val = buffer(offset, 2):uint()
-  sub:add(f.query_class, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.query_class, buffer(offset, 2)); offset = offset + 2
   return offset
 end
 
 local function parse_answer(buffer, tree, offset)
-  local sub = tree:add("answer")
-  -- name: manual implementation needed
+  local subtree = tree:add("answer")
+  -- name: manual implementation needed (complex size/type)
   local type_val = buffer(offset, 2):uint()
-  sub:add(f.type, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.type, buffer(offset, 2)); offset = offset + 2
   local answer_class_val = buffer(offset, 2):uint()
-  sub:add(f.answer_class, buffer(offset, 2)); offset = offset + 2
-  -- ttl: manual implementation needed
+  subtree:add(f.answer_class, buffer(offset, 2)); offset = offset + 2
+  -- ttl: manual implementation needed (complex size/type)
   local rdlength_val = buffer(offset, 2):uint()
-  sub:add(f.rdlength, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.rdlength, buffer(offset, 2)); offset = offset + 2
   local payload_size = rdlength_val
-  sub:add(f.payload, buffer(offset, payload_size)); offset = offset + payload_size
+  subtree:add(f.payload, buffer(offset, payload_size)); offset = offset + payload_size
   return offset
 end
 
 local function parse_domain_name(buffer, tree, offset)
-  local sub = tree:add("domain_name")
-  -- name: manual implementation needed
+  local subtree = tree:add("domain_name")
+  -- name: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_label(buffer, tree, offset)
-  local sub = tree:add("label")
+  local subtree = tree:add("label")
   local length_val = buffer(offset, 1):uint()
-  sub:add(f.length, buffer(offset, 1)); offset = offset + 1
-  -- pointer: manual implementation needed
+  subtree:add(f.length, buffer(offset, 1)); offset = offset + 1
+  -- pointer: manual implementation needed (complex size/type)
   local name_size = length_val
-  sub:add(f.name, buffer(offset, name_size)); offset = offset + name_size
+  subtree:add(f.name, buffer(offset, name_size)); offset = offset + name_size
   return offset
 end
 
 local function parse_pointer_struct(buffer, tree, offset)
-  local sub = tree:add("pointer_struct")
+  local subtree = tree:add("pointer_struct")
   local value_val = buffer(offset, 1):uint()
-  sub:add(f.value, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.value, buffer(offset, 1)); offset = offset + 1
   return offset
 end
 
 local function parse_address(buffer, tree, offset)
-  local sub = tree:add("address")
-  sub:add(f.ip, buffer(offset, 4)); offset = offset + 4
+  local subtree = tree:add("address")
+  subtree:add(f.ip, buffer(offset, 4)); offset = offset + 4
   return offset
 end
 
 local function parse_address_v6(buffer, tree, offset)
-  local sub = tree:add("address_v6")
-  sub:add(f.ip_v6, buffer(offset, 16)); offset = offset + 16
+  local subtree = tree:add("address_v6")
+  subtree:add(f.ip_v6, buffer(offset, 16)); offset = offset + 16
   return offset
 end
 
 local function parse_packet_flags(buffer, tree, offset)
-  local sub = tree:add("packet_flags")
+  local subtree = tree:add("packet_flags")
   local flag_val = buffer(offset, 2):uint()
-  sub:add(f.flag, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.flag, buffer(offset, 2)); offset = offset + 2
   return offset
 end
 
 local function parse_service(buffer, tree, offset)
-  local sub = tree:add("service")
+  local subtree = tree:add("service")
   local priority_val = buffer(offset, 2):uint()
-  sub:add(f.priority, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.priority, buffer(offset, 2)); offset = offset + 2
   local weight_val = buffer(offset, 2):uint()
-  sub:add(f.weight, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.weight, buffer(offset, 2)); offset = offset + 2
   local port_val = buffer(offset, 2):uint()
-  sub:add(f.port, buffer(offset, 2)); offset = offset + 2
-  -- target: manual implementation needed
+  subtree:add(f.port, buffer(offset, 2)); offset = offset + 2
+  -- target: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_txt(buffer, tree, offset)
-  local sub = tree:add("txt")
+  local subtree = tree:add("txt")
   local length_val = buffer(offset, 1):uint()
-  sub:add(f.length, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.length, buffer(offset, 1)); offset = offset + 1
   local text_size = length_val
-  sub:add(f.text, buffer(offset, text_size)); offset = offset + text_size
+  subtree:add(f.text, buffer(offset, text_size)); offset = offset + text_size
   return offset
 end
 
 local function parse_txt_body(buffer, tree, offset)
-  local sub = tree:add("txt_body")
-  -- data: manual implementation needed
+  local subtree = tree:add("txt_body")
+  -- data: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_authority_info(buffer, tree, offset)
-  local sub = tree:add("authority_info")
-  -- primary_ns: manual implementation needed
-  -- resoponsible_mailbox: manual implementation needed
+  local subtree = tree:add("authority_info")
+  -- primary_ns: manual implementation needed (complex size/type)
+  -- resoponsible_mailbox: manual implementation needed (complex size/type)
   local serial_val = buffer(offset, 4):uint()
-  sub:add(f.serial, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.serial, buffer(offset, 4)); offset = offset + 4
   local refresh_interval_val = buffer(offset, 4):uint()
-  sub:add(f.refresh_interval, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.refresh_interval, buffer(offset, 4)); offset = offset + 4
   local retry_interval_val = buffer(offset, 4):uint()
-  sub:add(f.retry_interval, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.retry_interval, buffer(offset, 4)); offset = offset + 4
   local expire_limit_val = buffer(offset, 4):uint()
-  sub:add(f.expire_limit, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.expire_limit, buffer(offset, 4)); offset = offset + 4
   local min_ttl_val = buffer(offset, 4):uint()
-  sub:add(f.min_ttl, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.min_ttl, buffer(offset, 4)); offset = offset + 4
   return offset
 end
 
 local function parse_mx_info(buffer, tree, offset)
-  local sub = tree:add("mx_info")
+  local subtree = tree:add("mx_info")
   local preference_val = buffer(offset, 2):uint()
-  sub:add(f.preference, buffer(offset, 2)); offset = offset + 2
-  -- mx: manual implementation needed
+  subtree:add(f.preference, buffer(offset, 2)); offset = offset + 2
+  -- mx: manual implementation needed (complex size/type)
   return offset
 end
 

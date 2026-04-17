@@ -1,4 +1,4 @@
-tls_client_hello_proto = Proto("tls_client_hello","tls_client_hello file")
+tls_client_hello_proto = Proto("kaitai_tls_client_hello","tls_client_hello file")
 
 local f = tls_client_hello_proto.fields
 
@@ -36,101 +36,101 @@ f.name = ProtoField.bytes("tls_client_hello.protocol.name", "name")
 
 -- sub-type parsers
 local function parse_version(buffer, tree, offset)
-  local sub = tree:add("version")
+  local subtree = tree:add("version")
   local major_val = buffer(offset, 1):uint()
-  sub:add(f.major, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.major, buffer(offset, 1)); offset = offset + 1
   local minor_val = buffer(offset, 1):uint()
-  sub:add(f.minor, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.minor, buffer(offset, 1)); offset = offset + 1
   return offset
 end
 
 local function parse_random(buffer, tree, offset)
-  local sub = tree:add("random")
+  local subtree = tree:add("random")
   local gmt_unix_time_val = buffer(offset, 4):uint()
-  sub:add(f.gmt_unix_time, buffer(offset, 4)); offset = offset + 4
-  sub:add(f.random, buffer(offset, 28)); offset = offset + 28
+  subtree:add(f.gmt_unix_time, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.random, buffer(offset, 28)); offset = offset + 28
   return offset
 end
 
 local function parse_session_id(buffer, tree, offset)
-  local sub = tree:add("session_id")
+  local subtree = tree:add("session_id")
   local len_val = buffer(offset, 1):uint()
-  sub:add(f.len, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.len, buffer(offset, 1)); offset = offset + 1
   local sid_size = len_val
-  sub:add(f.sid, buffer(offset, sid_size)); offset = offset + sid_size
+  subtree:add(f.sid, buffer(offset, sid_size)); offset = offset + sid_size
   return offset
 end
 
 local function parse_cipher_suites(buffer, tree, offset)
-  local sub = tree:add("cipher_suites")
+  local subtree = tree:add("cipher_suites")
   local len_val = buffer(offset, 2):uint()
-  sub:add(f.len, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len, buffer(offset, 2)); offset = offset + 2
   local cipher_suites_val = buffer(offset, 2):uint()
-  sub:add(f.cipher_suites, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.cipher_suites, buffer(offset, 2)); offset = offset + 2
   return offset
 end
 
 local function parse_compression_methods(buffer, tree, offset)
-  local sub = tree:add("compression_methods")
+  local subtree = tree:add("compression_methods")
   local len_val = buffer(offset, 1):uint()
-  sub:add(f.len, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.len, buffer(offset, 1)); offset = offset + 1
   local compression_methods_size = len_val
-  sub:add(f.compression_methods, buffer(offset, compression_methods_size)); offset = offset + compression_methods_size
+  subtree:add(f.compression_methods, buffer(offset, compression_methods_size)); offset = offset + compression_methods_size
   return offset
 end
 
 local function parse_extensions(buffer, tree, offset)
-  local sub = tree:add("extensions")
+  local subtree = tree:add("extensions")
   local len_val = buffer(offset, 2):uint()
-  sub:add(f.len, buffer(offset, 2)); offset = offset + 2
-  -- extensions: manual implementation needed
+  subtree:add(f.len, buffer(offset, 2)); offset = offset + 2
+  -- extensions: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_extension(buffer, tree, offset)
-  local sub = tree:add("extension")
+  local subtree = tree:add("extension")
   local type_val = buffer(offset, 2):uint()
-  sub:add(f.type, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.type, buffer(offset, 2)); offset = offset + 2
   local len_val = buffer(offset, 2):uint()
-  sub:add(f.len, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len, buffer(offset, 2)); offset = offset + 2
   local body_size = len_val
-  sub:add(f.body, buffer(offset, body_size)); offset = offset + body_size
+  subtree:add(f.body, buffer(offset, body_size)); offset = offset + body_size
   return offset
 end
 
 local function parse_sni(buffer, tree, offset)
-  local sub = tree:add("sni")
+  local subtree = tree:add("sni")
   local list_length_val = buffer(offset, 2):uint()
-  sub:add(f.list_length, buffer(offset, 2)); offset = offset + 2
-  -- server_names: manual implementation needed
+  subtree:add(f.list_length, buffer(offset, 2)); offset = offset + 2
+  -- server_names: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_server_name(buffer, tree, offset)
-  local sub = tree:add("server_name")
+  local subtree = tree:add("server_name")
   local name_type_val = buffer(offset, 1):uint()
-  sub:add(f.name_type, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.name_type, buffer(offset, 1)); offset = offset + 1
   local length_val = buffer(offset, 2):uint()
-  sub:add(f.length, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.length, buffer(offset, 2)); offset = offset + 2
   local host_name_size = length_val
-  sub:add(f.host_name, buffer(offset, host_name_size)); offset = offset + host_name_size
+  subtree:add(f.host_name, buffer(offset, host_name_size)); offset = offset + host_name_size
   return offset
 end
 
 local function parse_alpn(buffer, tree, offset)
-  local sub = tree:add("alpn")
+  local subtree = tree:add("alpn")
   local ext_len_val = buffer(offset, 2):uint()
-  sub:add(f.ext_len, buffer(offset, 2)); offset = offset + 2
-  -- alpn_protocols: manual implementation needed
+  subtree:add(f.ext_len, buffer(offset, 2)); offset = offset + 2
+  -- alpn_protocols: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_protocol(buffer, tree, offset)
-  local sub = tree:add("protocol")
+  local subtree = tree:add("protocol")
   local strlen_val = buffer(offset, 1):uint()
-  sub:add(f.strlen, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.strlen, buffer(offset, 1)); offset = offset + 1
   local name_size = strlen_val
-  sub:add(f.name, buffer(offset, name_size)); offset = offset + name_size
+  subtree:add(f.name, buffer(offset, name_size)); offset = offset + name_size
   return offset
 end
 

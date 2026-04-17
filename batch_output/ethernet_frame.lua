@@ -1,4 +1,4 @@
-ethernet_frame_proto = Proto("ethernet_frame","ethernet_frame file")
+ethernet_frame_proto = Proto("kaitai_ethernet_frame","ethernet_frame file")
 
 local f = ethernet_frame_proto.fields
 
@@ -15,10 +15,10 @@ f.vlan_id = ProtoField.bytes("ethernet_frame.tag_control_info.vlan_id", "vlan_id
 
 -- sub-type parsers
 local function parse_tag_control_info(buffer, tree, offset)
-  local sub = tree:add("tag_control_info")
-  -- priority: manual implementation needed
-  -- drop_eligible: manual implementation needed
-  -- vlan_id: manual implementation needed
+  local subtree = tree:add("tag_control_info")
+  -- priority: manual implementation needed (complex size/type)
+  -- drop_eligible: manual implementation needed (complex size/type)
+  -- vlan_id: manual implementation needed (complex size/type)
   return offset
 end
 
@@ -35,7 +35,7 @@ function ethernet_frame_proto.dissector(buffer, pinfo, tree)
   offset = parse_tag_control_info(buffer, main, offset)
   local ether_type_2_val = buffer(offset, 2):uint()
   main:add(f.ether_type_2, buffer(offset, 2)); offset = offset + 2
-  -- body: manual implementation needed
+  -- body: manual implementation needed (complex size/type)
 end
 
 tcp_table = DissectorTable.get("tcp.port")

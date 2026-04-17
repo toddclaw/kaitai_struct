@@ -1,4 +1,4 @@
-pcap_proto = Proto("pcap","pcap file")
+pcap_proto = Proto("kaitai_pcap","pcap file")
 
 local f = pcap_proto.fields
 
@@ -20,34 +20,33 @@ f.body = ProtoField.bytes("pcap.packet.body", "body")
 
 -- sub-type parsers
 local function parse_header(buffer, tree, offset)
-  local sub = tree:add("header")
-  sub:add(f.magic_number, buffer(offset, 4)); offset = offset + 4
+  local subtree = tree:add("header")
+  subtree:add(f.magic_number, buffer(offset, 4)); offset = offset + 4
   local version_major_val = buffer(offset, 2):uint()
-  sub:add(f.version_major, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.version_major, buffer(offset, 2)); offset = offset + 2
   local version_minor_val = buffer(offset, 2):uint()
-  sub:add(f.version_minor, buffer(offset, 2)); offset = offset + 2
-  -- thiszone: manual implementation needed
+  subtree:add(f.version_minor, buffer(offset, 2)); offset = offset + 2
+  -- thiszone: manual implementation needed (complex size/type)
   local sigfigs_val = buffer(offset, 4):uint()
-  sub:add(f.sigfigs, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.sigfigs, buffer(offset, 4)); offset = offset + 4
   local snaplen_val = buffer(offset, 4):uint()
-  sub:add(f.snaplen, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.snaplen, buffer(offset, 4)); offset = offset + 4
   local network_val = buffer(offset, 4):uint()
-  sub:add(f.network, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.network, buffer(offset, 4)); offset = offset + 4
   return offset
 end
 
 local function parse_packet(buffer, tree, offset)
-  local sub = tree:add("packet")
+  local subtree = tree:add("packet")
   local ts_sec_val = buffer(offset, 4):uint()
-  sub:add(f.ts_sec, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ts_sec, buffer(offset, 4)); offset = offset + 4
   local ts_usec_val = buffer(offset, 4):uint()
-  sub:add(f.ts_usec, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ts_usec, buffer(offset, 4)); offset = offset + 4
   local incl_len_val = buffer(offset, 4):uint()
-  sub:add(f.incl_len, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.incl_len, buffer(offset, 4)); offset = offset + 4
   local orig_len_val = buffer(offset, 4):uint()
-  sub:add(f.orig_len, buffer(offset, 4)); offset = offset + 4
-  local body_size = incl_len < _root.hdr.snaplen ? incl_len : _root.hdr.snaplen_val
-  sub:add(f.body, buffer(offset, body_size)); offset = offset + body_size
+  subtree:add(f.orig_len, buffer(offset, 4)); offset = offset + 4
+  -- body: manual implementation needed (complex size/type)
   return offset
 end
 

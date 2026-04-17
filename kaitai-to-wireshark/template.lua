@@ -1,4 +1,4 @@
-{{data.meta.id}}_proto = Proto("{{data.meta.id}}","{{data.meta.id}} file")
+{{data.meta.id}}_proto = Proto("kaitai_{{data.meta.id}}","{{data.meta.id}} file")
 
 local f = {{data.meta.id}}_proto.fields
 
@@ -15,26 +15,26 @@ f.{{seqitem.id}} = ProtoField.bytes("{{data.meta.id}}.{{typename}}.{{seqitem.id}
 -- sub-type parsers
 {% for typename, typedata in (data["types"] | default({})).items() %}
 local function parse_{{typename}}(buffer, tree, offset)
-  local sub = tree:add("{{typename}}")
+  local subtree = tree:add("{{typename}}")
 {% for seqitem in typedata.seq %}
 {% if seqitem.type is defined and seqitem.type == "u1" %}
   local {{seqitem.id}}_val = buffer(offset, 1):uint()
-  sub:add(f.{{seqitem.id}}, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.{{seqitem.id}}, buffer(offset, 1)); offset = offset + 1
 {% elif seqitem.type is defined and seqitem.type in ["u2", "u2be", "u2le"] %}
   local {{seqitem.id}}_val = buffer(offset, 2):uint()
-  sub:add(f.{{seqitem.id}}, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.{{seqitem.id}}, buffer(offset, 2)); offset = offset + 2
 {% elif seqitem.type is defined and seqitem.type in ["u4", "u4be", "u4le"] %}
   local {{seqitem.id}}_val = buffer(offset, 4):uint()
-  sub:add(f.{{seqitem.id}}, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.{{seqitem.id}}, buffer(offset, 4)); offset = offset + 4
 {% elif seqitem.contents is defined %}
-  sub:add(f.{{seqitem.id}}, buffer(offset, {{seqitem.contents|length}})); offset = offset + {{seqitem.contents|length}}
+  subtree:add(f.{{seqitem.id}}, buffer(offset, {{seqitem.contents|length}})); offset = offset + {{seqitem.contents|length}}
 {% elif seqitem.size is defined and seqitem.size is integer %}
-  sub:add(f.{{seqitem.id}}, buffer(offset, {{seqitem.size}})); offset = offset + {{seqitem.size}}
-{% elif seqitem.size is defined %}
+  subtree:add(f.{{seqitem.id}}, buffer(offset, {{seqitem.size}})); offset = offset + {{seqitem.size}}
+{% elif seqitem.size is defined and seqitem.size is string and '?' not in seqitem.size and '(' not in seqitem.size and ' ' not in seqitem.size %}
   local {{seqitem.id}}_size = {{seqitem.size}}_val
-  sub:add(f.{{seqitem.id}}, buffer(offset, {{seqitem.id}}_size)); offset = offset + {{seqitem.id}}_size
+  subtree:add(f.{{seqitem.id}}, buffer(offset, {{seqitem.id}}_size)); offset = offset + {{seqitem.id}}_size
 {% else %}
-  -- {{seqitem.id}}: manual implementation needed
+  -- {{seqitem.id}}: manual implementation needed (complex size/type)
 {% endif %}
 {% endfor %}
   return offset
@@ -70,7 +70,7 @@ function {{data.meta.id}}_proto.dissector(buffer, pinfo, tree)
   offset = parse_{{item.type}}(buffer, main, offset)
 {% endif %}
 {% else %}
-  -- {{item.id}}: manual implementation needed
+  -- {{item.id}}: manual implementation needed (complex size/type)
 {% endif %}
 {% endfor %}
 end

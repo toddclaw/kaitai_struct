@@ -1,4 +1,4 @@
-bitcoin_transaction_proto = Proto("bitcoin_transaction","bitcoin_transaction file")
+bitcoin_transaction_proto = Proto("kaitai_bitcoin_transaction","bitcoin_transaction file")
 
 local f = bitcoin_transaction_proto.fields
 
@@ -20,25 +20,25 @@ f.script_pub_key = ProtoField.bytes("bitcoin_transaction.vout.script_pub_key", "
 
 -- sub-type parsers
 local function parse_vin(buffer, tree, offset)
-  local sub = tree:add("vin")
-  sub:add(f.txid, buffer(offset, 32)); offset = offset + 32
+  local subtree = tree:add("vin")
+  subtree:add(f.txid, buffer(offset, 32)); offset = offset + 32
   local output_id_val = buffer(offset, 4):uint()
-  sub:add(f.output_id, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.output_id, buffer(offset, 4)); offset = offset + 4
   local len_script_val = buffer(offset, 1):uint()
-  sub:add(f.len_script, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.len_script, buffer(offset, 1)); offset = offset + 1
   local script_sig_size = len_script_val
-  sub:add(f.script_sig, buffer(offset, script_sig_size)); offset = offset + script_sig_size
-  sub:add(f.end_of_vin, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.script_sig, buffer(offset, script_sig_size)); offset = offset + script_sig_size
+  subtree:add(f.end_of_vin, buffer(offset, 4)); offset = offset + 4
   return offset
 end
 
 local function parse_vout(buffer, tree, offset)
-  local sub = tree:add("vout")
-  -- amount: manual implementation needed
+  local subtree = tree:add("vout")
+  -- amount: manual implementation needed (complex size/type)
   local len_script_val = buffer(offset, 1):uint()
-  sub:add(f.len_script, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.len_script, buffer(offset, 1)); offset = offset + 1
   local script_pub_key_size = len_script_val
-  sub:add(f.script_pub_key, buffer(offset, script_pub_key_size)); offset = offset + script_pub_key_size
+  subtree:add(f.script_pub_key, buffer(offset, script_pub_key_size)); offset = offset + script_pub_key_size
   return offset
 end
 

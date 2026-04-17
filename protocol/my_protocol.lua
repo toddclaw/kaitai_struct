@@ -1,4 +1,4 @@
-my_protocol_proto = Proto("my_protocol","my_protocol file")
+my_protocol_proto = Proto("kaitai_my_protocol","my_protocol file")
 
 local f = my_protocol_proto.fields
 
@@ -14,13 +14,13 @@ f.record_data = ProtoField.bytes("my_protocol.record.record_data", "record_data"
 
 -- sub-type parsers
 local function parse_record(buffer, tree, offset)
-  local sub = tree:add("record")
+  local subtree = tree:add("record")
   local record_type_val = buffer(offset, 1):uint()
-  sub:add(f.record_type, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.record_type, buffer(offset, 1)); offset = offset + 1
   local record_length_val = buffer(offset, 1):uint()
-  sub:add(f.record_length, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.record_length, buffer(offset, 1)); offset = offset + 1
   local record_data_size = record_length_val
-  sub:add(f.record_data, buffer(offset, record_data_size)); offset = offset + record_data_size
+  subtree:add(f.record_data, buffer(offset, record_data_size)); offset = offset + record_data_size
   return offset
 end
 

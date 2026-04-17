@@ -1,4 +1,4 @@
-websocket_proto = Proto("websocket","websocket file")
+websocket_proto = Proto("kaitai_websocket","websocket file")
 
 local f = websocket_proto.fields
 
@@ -22,38 +22,38 @@ f.payload_text = ProtoField.bytes("websocket.dataframe.payload_text", "payload_t
 
 -- sub-type parsers
 local function parse_frame_header(buffer, tree, offset)
-  local sub = tree:add("frame_header")
-  -- finished: manual implementation needed
-  -- reserved: manual implementation needed
-  -- opcode: manual implementation needed
-  -- is_masked: manual implementation needed
-  -- len_payload_primary: manual implementation needed
+  local subtree = tree:add("frame_header")
+  -- finished: manual implementation needed (complex size/type)
+  -- reserved: manual implementation needed (complex size/type)
+  -- opcode: manual implementation needed (complex size/type)
+  -- is_masked: manual implementation needed (complex size/type)
+  -- len_payload_primary: manual implementation needed (complex size/type)
   local len_payload_extended_1_val = buffer(offset, 2):uint()
-  sub:add(f.len_payload_extended_1, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len_payload_extended_1, buffer(offset, 2)); offset = offset + 2
   local len_payload_extended_2_val = buffer(offset, 4):uint()
-  sub:add(f.len_payload_extended_2, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.len_payload_extended_2, buffer(offset, 4)); offset = offset + 4
   local mask_key_val = buffer(offset, 4):uint()
-  sub:add(f.mask_key, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.mask_key, buffer(offset, 4)); offset = offset + 4
   return offset
 end
 
 local function parse_initial_frame(buffer, tree, offset)
-  local sub = tree:add("initial_frame")
-  -- header: manual implementation needed
+  local subtree = tree:add("initial_frame")
+  -- header: manual implementation needed (complex size/type)
   local payload_bytes_size = header.len_payload_val
-  sub:add(f.payload_bytes, buffer(offset, payload_bytes_size)); offset = offset + payload_bytes_size
+  subtree:add(f.payload_bytes, buffer(offset, payload_bytes_size)); offset = offset + payload_bytes_size
   local payload_text_size = header.len_payload_val
-  sub:add(f.payload_text, buffer(offset, payload_text_size)); offset = offset + payload_text_size
+  subtree:add(f.payload_text, buffer(offset, payload_text_size)); offset = offset + payload_text_size
   return offset
 end
 
 local function parse_dataframe(buffer, tree, offset)
-  local sub = tree:add("dataframe")
-  -- header: manual implementation needed
+  local subtree = tree:add("dataframe")
+  -- header: manual implementation needed (complex size/type)
   local payload_bytes_size = header.len_payload_val
-  sub:add(f.payload_bytes, buffer(offset, payload_bytes_size)); offset = offset + payload_bytes_size
+  subtree:add(f.payload_bytes, buffer(offset, payload_bytes_size)); offset = offset + payload_bytes_size
   local payload_text_size = header.len_payload_val
-  sub:add(f.payload_text, buffer(offset, payload_text_size)); offset = offset + payload_text_size
+  subtree:add(f.payload_text, buffer(offset, payload_text_size)); offset = offset + payload_text_size
   return offset
 end
 

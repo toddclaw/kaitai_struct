@@ -1,4 +1,4 @@
-hccapx_proto = Proto("hccapx","hccapx file")
+hccapx_proto = Proto("kaitai_hccapx","hccapx file")
 
 local f = hccapx_proto.fields
 
@@ -23,31 +23,29 @@ f.padding2 = ProtoField.bytes("hccapx.hccapx_record.padding2", "padding2")
 
 -- sub-type parsers
 local function parse_hccapx_record(buffer, tree, offset)
-  local sub = tree:add("hccapx_record")
-  sub:add(f.magic, buffer(offset, 4)); offset = offset + 4
+  local subtree = tree:add("hccapx_record")
+  subtree:add(f.magic, buffer(offset, 4)); offset = offset + 4
   local version_val = buffer(offset, 4):uint()
-  sub:add(f.version, buffer(offset, 4)); offset = offset + 4
-  -- ignore_replay_counter: manual implementation needed
-  -- message_pair: manual implementation needed
+  subtree:add(f.version, buffer(offset, 4)); offset = offset + 4
+  -- ignore_replay_counter: manual implementation needed (complex size/type)
+  -- message_pair: manual implementation needed (complex size/type)
   local len_essid_val = buffer(offset, 1):uint()
-  sub:add(f.len_essid, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.len_essid, buffer(offset, 1)); offset = offset + 1
   local essid_size = len_essid_val
-  sub:add(f.essid, buffer(offset, essid_size)); offset = offset + essid_size
-  local padding1_size = 32 - len_essid_val
-  sub:add(f.padding1, buffer(offset, padding1_size)); offset = offset + padding1_size
+  subtree:add(f.essid, buffer(offset, essid_size)); offset = offset + essid_size
+  -- padding1: manual implementation needed (complex size/type)
   local keyver_val = buffer(offset, 1):uint()
-  sub:add(f.keyver, buffer(offset, 1)); offset = offset + 1
-  sub:add(f.keymic, buffer(offset, 16)); offset = offset + 16
-  sub:add(f.mac_ap, buffer(offset, 6)); offset = offset + 6
-  sub:add(f.nonce_ap, buffer(offset, 32)); offset = offset + 32
-  sub:add(f.mac_station, buffer(offset, 6)); offset = offset + 6
-  sub:add(f.nonce_station, buffer(offset, 32)); offset = offset + 32
+  subtree:add(f.keyver, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.keymic, buffer(offset, 16)); offset = offset + 16
+  subtree:add(f.mac_ap, buffer(offset, 6)); offset = offset + 6
+  subtree:add(f.nonce_ap, buffer(offset, 32)); offset = offset + 32
+  subtree:add(f.mac_station, buffer(offset, 6)); offset = offset + 6
+  subtree:add(f.nonce_station, buffer(offset, 32)); offset = offset + 32
   local len_eapol_val = buffer(offset, 2):uint()
-  sub:add(f.len_eapol, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len_eapol, buffer(offset, 2)); offset = offset + 2
   local eapol_size = len_eapol_val
-  sub:add(f.eapol, buffer(offset, eapol_size)); offset = offset + eapol_size
-  local padding2_size = 256 - len_eapol_val
-  sub:add(f.padding2, buffer(offset, padding2_size)); offset = offset + padding2_size
+  subtree:add(f.eapol, buffer(offset, eapol_size)); offset = offset + eapol_size
+  -- padding2: manual implementation needed (complex size/type)
   return offset
 end
 

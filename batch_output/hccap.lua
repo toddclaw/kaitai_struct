@@ -1,4 +1,4 @@
-hccap_proto = Proto("hccap","hccap file")
+hccap_proto = Proto("kaitai_hccap","hccap file")
 
 local f = hccap_proto.fields
 
@@ -16,23 +16,23 @@ f.keymic = ProtoField.bytes("hccap.hccap_record.keymic", "keymic")
 
 -- sub-type parsers
 local function parse_hccap_record(buffer, tree, offset)
-  local sub = tree:add("hccap_record")
-  sub:add(f.essid, buffer(offset, 36)); offset = offset + 36
-  sub:add(f.mac_ap, buffer(offset, 6)); offset = offset + 6
-  sub:add(f.mac_station, buffer(offset, 6)); offset = offset + 6
-  sub:add(f.nonce_station, buffer(offset, 32)); offset = offset + 32
-  sub:add(f.nonce_ap, buffer(offset, 32)); offset = offset + 32
-  sub:add(f.eapol_buffer, buffer(offset, 256)); offset = offset + 256
+  local subtree = tree:add("hccap_record")
+  subtree:add(f.essid, buffer(offset, 36)); offset = offset + 36
+  subtree:add(f.mac_ap, buffer(offset, 6)); offset = offset + 6
+  subtree:add(f.mac_station, buffer(offset, 6)); offset = offset + 6
+  subtree:add(f.nonce_station, buffer(offset, 32)); offset = offset + 32
+  subtree:add(f.nonce_ap, buffer(offset, 32)); offset = offset + 32
+  subtree:add(f.eapol_buffer, buffer(offset, 256)); offset = offset + 256
   local len_eapol_val = buffer(offset, 4):uint()
-  sub:add(f.len_eapol, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.len_eapol, buffer(offset, 4)); offset = offset + 4
   local keyver_val = buffer(offset, 4):uint()
-  sub:add(f.keyver, buffer(offset, 4)); offset = offset + 4
-  sub:add(f.keymic, buffer(offset, 16)); offset = offset + 16
+  subtree:add(f.keyver, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.keymic, buffer(offset, 16)); offset = offset + 16
   return offset
 end
 
 local function parse_eapol_dummy(buffer, tree, offset)
-  local sub = tree:add("eapol_dummy")
+  local subtree = tree:add("eapol_dummy")
   return offset
 end
 

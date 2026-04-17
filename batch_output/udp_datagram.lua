@@ -1,4 +1,4 @@
-udp_datagram_proto = Proto("udp_datagram","udp_datagram file")
+udp_datagram_proto = Proto("kaitai_udp_datagram","udp_datagram file")
 
 local f = udp_datagram_proto.fields
 
@@ -24,7 +24,7 @@ function udp_datagram_proto.dissector(buffer, pinfo, tree)
   main:add(f.length, buffer(offset, 2)); offset = offset + 2
   local checksum_val = buffer(offset, 2):uint()
   main:add(f.checksum, buffer(offset, 2)); offset = offset + 2
-  -- body: manual implementation needed
+  -- body: manual implementation needed (complex size/type)
 end
 
 tcp_table = DissectorTable.get("tcp.port")

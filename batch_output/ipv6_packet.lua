@@ -1,4 +1,4 @@
-ipv6_packet_proto = Proto("ipv6_packet","ipv6_packet file")
+ipv6_packet_proto = Proto("kaitai_ipv6_packet","ipv6_packet file")
 
 local f = ipv6_packet_proto.fields
 
@@ -21,9 +21,9 @@ function ipv6_packet_proto.dissector(buffer, pinfo, tree)
   local main = tree:add(ipv6_packet_proto, buffer(), "ipv6_packet")
   local offset = 0
 
-  -- version: manual implementation needed
-  -- traffic_class: manual implementation needed
-  -- flow_label: manual implementation needed
+  -- version: manual implementation needed (complex size/type)
+  -- traffic_class: manual implementation needed (complex size/type)
+  -- flow_label: manual implementation needed (complex size/type)
   local payload_length_val = buffer(offset, 2):uint()
   main:add(f.payload_length, buffer(offset, 2)); offset = offset + 2
   local next_header_type_val = buffer(offset, 1):uint()
@@ -32,8 +32,8 @@ function ipv6_packet_proto.dissector(buffer, pinfo, tree)
   main:add(f.hop_limit, buffer(offset, 1)); offset = offset + 1
   main:add(f.src_ipv6_addr, buffer(offset, 16)); offset = offset + 16
   main:add(f.dst_ipv6_addr, buffer(offset, 16)); offset = offset + 16
-  -- next_header: manual implementation needed
-  -- rest: manual implementation needed
+  -- next_header: manual implementation needed (complex size/type)
+  -- rest: manual implementation needed (complex size/type)
 end
 
 tcp_table = DissectorTable.get("tcp.port")

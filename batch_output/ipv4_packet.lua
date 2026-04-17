@@ -1,4 +1,4 @@
-ipv4_packet_proto = Proto("ipv4_packet","ipv4_packet file")
+ipv4_packet_proto = Proto("kaitai_ipv4_packet","ipv4_packet file")
 
 local f = ipv4_packet_proto.fields
 
@@ -22,19 +22,18 @@ f.body = ProtoField.bytes("ipv4_packet.ipv4_option.body", "body")
 
 -- sub-type parsers
 local function parse_ipv4_options(buffer, tree, offset)
-  local sub = tree:add("ipv4_options")
-  -- entries: manual implementation needed
+  local subtree = tree:add("ipv4_options")
+  -- entries: manual implementation needed (complex size/type)
   return offset
 end
 
 local function parse_ipv4_option(buffer, tree, offset)
-  local sub = tree:add("ipv4_option")
+  local subtree = tree:add("ipv4_option")
   local b1_val = buffer(offset, 1):uint()
-  sub:add(f.b1, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.b1, buffer(offset, 1)); offset = offset + 1
   local len_val = buffer(offset, 1):uint()
-  sub:add(f.len, buffer(offset, 1)); offset = offset + 1
-  local body_size = len > 2 ? len - 2 : 0_val
-  sub:add(f.body, buffer(offset, body_size)); offset = offset + body_size
+  subtree:add(f.len, buffer(offset, 1)); offset = offset + 1
+  -- body: manual implementation needed (complex size/type)
   return offset
 end
 
@@ -63,7 +62,7 @@ function ipv4_packet_proto.dissector(buffer, pinfo, tree)
   main:add(f.src_ip_addr, buffer(offset, 4)); offset = offset + 4
   main:add(f.dst_ip_addr, buffer(offset, 4)); offset = offset + 4
   offset = parse_ipv4_options(buffer, main, offset)
-  -- body: manual implementation needed
+  -- body: manual implementation needed (complex size/type)
 end
 
 tcp_table = DissectorTable.get("tcp.port")

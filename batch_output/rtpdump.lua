@@ -1,4 +1,4 @@
-rtpdump_proto = Proto("rtpdump","rtpdump file")
+rtpdump_proto = Proto("kaitai_rtpdump","rtpdump file")
 
 local f = rtpdump_proto.fields
 
@@ -21,34 +21,34 @@ f.body = ProtoField.bytes("rtpdump.packet_t.body", "body")
 
 -- sub-type parsers
 local function parse_header_t(buffer, tree, offset)
-  local sub = tree:add("header_t")
-  sub:add(f.shebang, buffer(offset, 12)); offset = offset + 12
-  sub:add(f.space, buffer(offset, 1)); offset = offset + 1
-  -- ip: manual implementation needed
-  -- port: manual implementation needed
+  local subtree = tree:add("header_t")
+  subtree:add(f.shebang, buffer(offset, 12)); offset = offset + 12
+  subtree:add(f.space, buffer(offset, 1)); offset = offset + 1
+  -- ip: manual implementation needed (complex size/type)
+  -- port: manual implementation needed (complex size/type)
   local start_sec_val = buffer(offset, 4):uint()
-  sub:add(f.start_sec, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.start_sec, buffer(offset, 4)); offset = offset + 4
   local start_usec_val = buffer(offset, 4):uint()
-  sub:add(f.start_usec, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.start_usec, buffer(offset, 4)); offset = offset + 4
   local ip2_val = buffer(offset, 4):uint()
-  sub:add(f.ip2, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.ip2, buffer(offset, 4)); offset = offset + 4
   local port2_val = buffer(offset, 2):uint()
-  sub:add(f.port2, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.port2, buffer(offset, 2)); offset = offset + 2
   local padding_val = buffer(offset, 2):uint()
-  sub:add(f.padding, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.padding, buffer(offset, 2)); offset = offset + 2
   return offset
 end
 
 local function parse_packet_t(buffer, tree, offset)
-  local sub = tree:add("packet_t")
+  local subtree = tree:add("packet_t")
   local length_val = buffer(offset, 2):uint()
-  sub:add(f.length, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.length, buffer(offset, 2)); offset = offset + 2
   local len_body_val = buffer(offset, 2):uint()
-  sub:add(f.len_body, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.len_body, buffer(offset, 2)); offset = offset + 2
   local packet_usec_val = buffer(offset, 4):uint()
-  sub:add(f.packet_usec, buffer(offset, 4)); offset = offset + 4
+  subtree:add(f.packet_usec, buffer(offset, 4)); offset = offset + 4
   local body_size = len_body_val
-  sub:add(f.body, buffer(offset, body_size)); offset = offset + body_size
+  subtree:add(f.body, buffer(offset, body_size)); offset = offset + body_size
   return offset
 end
 

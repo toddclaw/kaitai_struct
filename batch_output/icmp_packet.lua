@@ -1,4 +1,4 @@
-icmp_packet_proto = Proto("icmp_packet","icmp_packet file")
+icmp_packet_proto = Proto("kaitai_icmp_packet","icmp_packet file")
 
 local f = icmp_packet_proto.fields
 
@@ -19,33 +19,33 @@ f.data = ProtoField.bytes("icmp_packet.echo_msg.data", "data")
 
 -- sub-type parsers
 local function parse_destination_unreachable_msg(buffer, tree, offset)
-  local sub = tree:add("destination_unreachable_msg")
+  local subtree = tree:add("destination_unreachable_msg")
   local code_val = buffer(offset, 1):uint()
-  sub:add(f.code, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.code, buffer(offset, 1)); offset = offset + 1
   local checksum_val = buffer(offset, 2):uint()
-  sub:add(f.checksum, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.checksum, buffer(offset, 2)); offset = offset + 2
   return offset
 end
 
 local function parse_time_exceeded_msg(buffer, tree, offset)
-  local sub = tree:add("time_exceeded_msg")
+  local subtree = tree:add("time_exceeded_msg")
   local code_val = buffer(offset, 1):uint()
-  sub:add(f.code, buffer(offset, 1)); offset = offset + 1
+  subtree:add(f.code, buffer(offset, 1)); offset = offset + 1
   local checksum_val = buffer(offset, 2):uint()
-  sub:add(f.checksum, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.checksum, buffer(offset, 2)); offset = offset + 2
   return offset
 end
 
 local function parse_echo_msg(buffer, tree, offset)
-  local sub = tree:add("echo_msg")
-  sub:add(f.code, buffer(offset, 1)); offset = offset + 1
+  local subtree = tree:add("echo_msg")
+  subtree:add(f.code, buffer(offset, 1)); offset = offset + 1
   local checksum_val = buffer(offset, 2):uint()
-  sub:add(f.checksum, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.checksum, buffer(offset, 2)); offset = offset + 2
   local identifier_val = buffer(offset, 2):uint()
-  sub:add(f.identifier, buffer(offset, 2)); offset = offset + 2
+  subtree:add(f.identifier, buffer(offset, 2)); offset = offset + 2
   local seq_num_val = buffer(offset, 2):uint()
-  sub:add(f.seq_num, buffer(offset, 2)); offset = offset + 2
-  -- data: manual implementation needed
+  subtree:add(f.seq_num, buffer(offset, 2)); offset = offset + 2
+  -- data: manual implementation needed (complex size/type)
   return offset
 end
 
