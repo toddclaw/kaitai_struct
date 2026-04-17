@@ -2,7 +2,7 @@ meta:
   id: test_sample
   title: Test Sample Protocol
   endian: be
-  tcp_port: 9000
+  tcp_port: 8001
 
 seq:
   - id: magic
