@@ -13,7 +13,7 @@ f.{{seqitem.id}} = ProtoField.bytes("{{data.meta.id}}.{{item.0}}.{{seqitem.id}}"
 {% endfor %}
 
 -- main function
-function modes_proto.dissector(buffer,pinfo,tree)
+function {{data.meta.id}}_proto.dissector(buffer,pinfo,tree)
   pinfo.cols.protocol = "{{data.meta.id}}"
 
   main = tree:add({{data.meta.id}}_proto, "{{data.meta.id}} file")

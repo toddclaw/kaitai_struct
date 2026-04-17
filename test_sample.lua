@@ -9,7 +9,7 @@ f.length = ProtoField.bytes("test_sample.length", "length")
 f.payload = ProtoField.bytes("test_sample.payload", "payload")
 
 -- main function
-function modes_proto.dissector(buffer,pinfo,tree)
+function test_sample_proto.dissector(buffer,pinfo,tree)
   pinfo.cols.protocol = "test_sample"
 
   main = tree:add(test_sample_proto, "test_sample file")
