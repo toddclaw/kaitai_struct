@@ -43,4 +43,4 @@ function my_protocol_proto.dissector(buffer, pinfo, tree)
 end
 
 tcp_table = DissectorTable.get("tcp.port")
-tcp_table:add(8001, my_protocol_proto)
+tcp_table:add(8002, my_protocol_proto)

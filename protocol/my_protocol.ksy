@@ -2,7 +2,7 @@ meta:
   id: my_protocol
   title: My Test Protocol
   endian: be
-  tcp_port: 8001
+  tcp_port: 8002
 
 seq:
   - id: magic

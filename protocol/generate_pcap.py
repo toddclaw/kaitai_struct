@@ -41,7 +41,7 @@ dst_mac = "00:00:00:00:00:02"
 src_ip  = "192.168.1.1"
 dst_ip  = "192.168.1.2"
 sport   = 54321
-dport   = 8001
+dport   = 8002
 
 def pkt(seq, ack, flags, payload=b""):
     p = (
