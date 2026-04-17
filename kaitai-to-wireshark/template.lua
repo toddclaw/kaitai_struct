@@ -4,11 +4,11 @@ local f = {{data.meta.id}}_proto.fields
 
 -- field declarations
 {% for item in data.seq %}
-f.{{item.id}} = ProtoField.bytes("{{data.meta.id}}.{{item.id}}", "{{item.id}}")
+f.{{item.id}} = ProtoField.bytes("kaitai_{{data.meta.id}}.{{item.id}}", "{{item.id}}")
 {% endfor %}
 {% for typename, typedata in (data["types"] | default({})).items() %}
 {% for seqitem in typedata.seq %}
-f.{{seqitem.id}} = ProtoField.bytes("{{data.meta.id}}.{{typename}}.{{seqitem.id}}", "{{seqitem.id}}")
+f.{{seqitem.id}} = ProtoField.bytes("kaitai_{{data.meta.id}}.{{typename}}.{{seqitem.id}}", "{{seqitem.id}}")
 {% endfor %}
 {% endfor %}
 

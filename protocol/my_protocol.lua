@@ -3,14 +3,14 @@ my_protocol_proto = Proto("kaitai_my_protocol","my_protocol file")
 local f = my_protocol_proto.fields
 
 -- field declarations
-f.magic = ProtoField.bytes("my_protocol.magic", "magic")
-f.version = ProtoField.bytes("my_protocol.version", "version")
-f.msg_type = ProtoField.bytes("my_protocol.msg_type", "msg_type")
-f.record_count = ProtoField.bytes("my_protocol.record_count", "record_count")
-f.records = ProtoField.bytes("my_protocol.records", "records")
-f.record_type = ProtoField.bytes("my_protocol.record.record_type", "record_type")
-f.record_length = ProtoField.bytes("my_protocol.record.record_length", "record_length")
-f.record_data = ProtoField.bytes("my_protocol.record.record_data", "record_data")
+f.magic = ProtoField.bytes("kaitai_my_protocol.magic", "magic")
+f.version = ProtoField.bytes("kaitai_my_protocol.version", "version")
+f.msg_type = ProtoField.bytes("kaitai_my_protocol.msg_type", "msg_type")
+f.record_count = ProtoField.bytes("kaitai_my_protocol.record_count", "record_count")
+f.records = ProtoField.bytes("kaitai_my_protocol.records", "records")
+f.record_type = ProtoField.bytes("kaitai_my_protocol.record.record_type", "record_type")
+f.record_length = ProtoField.bytes("kaitai_my_protocol.record.record_length", "record_length")
+f.record_data = ProtoField.bytes("kaitai_my_protocol.record.record_data", "record_data")
 
 -- sub-type parsers
 local function parse_record(buffer, tree, offset)

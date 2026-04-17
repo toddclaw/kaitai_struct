@@ -3,16 +3,16 @@ ipv6_packet_proto = Proto("kaitai_ipv6_packet","ipv6_packet file")
 local f = ipv6_packet_proto.fields
 
 -- field declarations
-f.version = ProtoField.bytes("ipv6_packet.version", "version")
-f.traffic_class = ProtoField.bytes("ipv6_packet.traffic_class", "traffic_class")
-f.flow_label = ProtoField.bytes("ipv6_packet.flow_label", "flow_label")
-f.payload_length = ProtoField.bytes("ipv6_packet.payload_length", "payload_length")
-f.next_header_type = ProtoField.bytes("ipv6_packet.next_header_type", "next_header_type")
-f.hop_limit = ProtoField.bytes("ipv6_packet.hop_limit", "hop_limit")
-f.src_ipv6_addr = ProtoField.bytes("ipv6_packet.src_ipv6_addr", "src_ipv6_addr")
-f.dst_ipv6_addr = ProtoField.bytes("ipv6_packet.dst_ipv6_addr", "dst_ipv6_addr")
-f.next_header = ProtoField.bytes("ipv6_packet.next_header", "next_header")
-f.rest = ProtoField.bytes("ipv6_packet.rest", "rest")
+f.version = ProtoField.bytes("kaitai_ipv6_packet.version", "version")
+f.traffic_class = ProtoField.bytes("kaitai_ipv6_packet.traffic_class", "traffic_class")
+f.flow_label = ProtoField.bytes("kaitai_ipv6_packet.flow_label", "flow_label")
+f.payload_length = ProtoField.bytes("kaitai_ipv6_packet.payload_length", "payload_length")
+f.next_header_type = ProtoField.bytes("kaitai_ipv6_packet.next_header_type", "next_header_type")
+f.hop_limit = ProtoField.bytes("kaitai_ipv6_packet.hop_limit", "hop_limit")
+f.src_ipv6_addr = ProtoField.bytes("kaitai_ipv6_packet.src_ipv6_addr", "src_ipv6_addr")
+f.dst_ipv6_addr = ProtoField.bytes("kaitai_ipv6_packet.dst_ipv6_addr", "dst_ipv6_addr")
+f.next_header = ProtoField.bytes("kaitai_ipv6_packet.next_header", "next_header")
+f.rest = ProtoField.bytes("kaitai_ipv6_packet.rest", "rest")
 
 -- sub-type parsers
 -- main dissector

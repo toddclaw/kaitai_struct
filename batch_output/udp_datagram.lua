@@ -3,11 +3,11 @@ udp_datagram_proto = Proto("kaitai_udp_datagram","udp_datagram file")
 local f = udp_datagram_proto.fields
 
 -- field declarations
-f.src_port = ProtoField.bytes("udp_datagram.src_port", "src_port")
-f.dst_port = ProtoField.bytes("udp_datagram.dst_port", "dst_port")
-f.length = ProtoField.bytes("udp_datagram.length", "length")
-f.checksum = ProtoField.bytes("udp_datagram.checksum", "checksum")
-f.body = ProtoField.bytes("udp_datagram.body", "body")
+f.src_port = ProtoField.bytes("kaitai_udp_datagram.src_port", "src_port")
+f.dst_port = ProtoField.bytes("kaitai_udp_datagram.dst_port", "dst_port")
+f.length = ProtoField.bytes("kaitai_udp_datagram.length", "length")
+f.checksum = ProtoField.bytes("kaitai_udp_datagram.checksum", "checksum")
+f.body = ProtoField.bytes("kaitai_udp_datagram.body", "body")
 
 -- sub-type parsers
 -- main dissector

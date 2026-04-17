@@ -3,15 +3,15 @@ ethernet_frame_proto = Proto("kaitai_ethernet_frame","ethernet_frame file")
 local f = ethernet_frame_proto.fields
 
 -- field declarations
-f.dst_mac = ProtoField.bytes("ethernet_frame.dst_mac", "dst_mac")
-f.src_mac = ProtoField.bytes("ethernet_frame.src_mac", "src_mac")
-f.ether_type_1 = ProtoField.bytes("ethernet_frame.ether_type_1", "ether_type_1")
-f.tci = ProtoField.bytes("ethernet_frame.tci", "tci")
-f.ether_type_2 = ProtoField.bytes("ethernet_frame.ether_type_2", "ether_type_2")
-f.body = ProtoField.bytes("ethernet_frame.body", "body")
-f.priority = ProtoField.bytes("ethernet_frame.tag_control_info.priority", "priority")
-f.drop_eligible = ProtoField.bytes("ethernet_frame.tag_control_info.drop_eligible", "drop_eligible")
-f.vlan_id = ProtoField.bytes("ethernet_frame.tag_control_info.vlan_id", "vlan_id")
+f.dst_mac = ProtoField.bytes("kaitai_ethernet_frame.dst_mac", "dst_mac")
+f.src_mac = ProtoField.bytes("kaitai_ethernet_frame.src_mac", "src_mac")
+f.ether_type_1 = ProtoField.bytes("kaitai_ethernet_frame.ether_type_1", "ether_type_1")
+f.tci = ProtoField.bytes("kaitai_ethernet_frame.tci", "tci")
+f.ether_type_2 = ProtoField.bytes("kaitai_ethernet_frame.ether_type_2", "ether_type_2")
+f.body = ProtoField.bytes("kaitai_ethernet_frame.body", "body")
+f.priority = ProtoField.bytes("kaitai_ethernet_frame.tag_control_info.priority", "priority")
+f.drop_eligible = ProtoField.bytes("kaitai_ethernet_frame.tag_control_info.drop_eligible", "drop_eligible")
+f.vlan_id = ProtoField.bytes("kaitai_ethernet_frame.tag_control_info.vlan_id", "vlan_id")
 
 -- sub-type parsers
 local function parse_tag_control_info(buffer, tree, offset)
