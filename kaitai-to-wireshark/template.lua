@@ -43,4 +43,4 @@ function modes_proto.dissector(buffer,pinfo,tree)
 end
 
 tcp_table = DissectorTable.get("tcp.port")
-tcp_table:add(<port>, {{data.meta.id}}_proto)
+tcp_table:add({{data.meta.tcp_port | default(0)}}, {{data.meta.id}}_proto)
